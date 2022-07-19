@@ -1,6 +1,9 @@
-import type { ActionFunction, LoaderFunction } from "@remix-run/node";
+import React from "react";
+import type { ActionFunction } from "@remix-run/node";
 import { json } from "@remix-run/node";
-import { useFetcher, useLoaderData } from "@remix-run/react";
+import { useFetcher } from "@remix-run/react";
+import QRCode from "~/components/QRCode";
+import { generateWifiQRString } from "~/util/qr.server";
 
 export const action: ActionFunction = async ({ request }) => {
   const formData = await request.formData();
@@ -9,15 +12,24 @@ export const action: ActionFunction = async ({ request }) => {
   const hidden = formData.get('hidden');
   const security = formData.get('security');
 
+  const QRString = generateWifiQRString({
+    ssid,
+    password,
+    hidden,
+    security
+  });
+
   // validate inputs
   // render a qr string
 
-  return json({ message: "OK!" });
+  return json({ QRString });
 };
 
 export default function GeneratorRoute() {
   const generator = useFetcher();
   return (
+    <React.Fragment>
+
     <generator.Form 
     method="post"
     className="flex-col [&>div]:mb-3"
@@ -79,5 +91,9 @@ export default function GeneratorRoute() {
         }
         </button>
       </generator.Form>
+      {generator.data?.QRString &&
+        <QRCode QRString={generator.data.QRString}/>
+      }
+    </React.Fragment>
   );
 }

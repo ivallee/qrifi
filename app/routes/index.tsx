@@ -1,5 +1,5 @@
 import { Link, Outlet } from "@remix-run/react";
-import Layout from "~/components/layout";
+import Layout from "~/components/Layout";
 
 export default function Index() {
   return (

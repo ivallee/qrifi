@@ -10,7 +10,7 @@ export default function Layout({ children } : LayoutProps) {
       <header className="flex justify-between items-center">
         <h1 className="text-2xl font-light">
           <strong className="font-bold">
-            WifiQ
+            QRifi
           </strong>
         </h1>
       </header>
