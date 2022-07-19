@@ -1,11 +1,10 @@
-import { Outlet } from "@remix-run/react";
-import GeneratorRoute from "./__generator";
+import { Link, Outlet } from "@remix-run/react";
 import Layout from "~/components/layout";
 
 export default function Index() {
   return (
     <Layout>
-      <GeneratorRoute/>
+      <Link to="/generator">Hit the generator!</Link>
     </Layout>
   );
 }
