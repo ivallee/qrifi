@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import type { ActionFunction } from "@remix-run/node";
 import { json } from "@remix-run/node";
 import { useFetcher } from "@remix-run/react";
@@ -27,73 +27,84 @@ export const action: ActionFunction = async ({ request }) => {
 
 export default function GeneratorRoute() {
   const generator = useFetcher();
-  return (
-    <React.Fragment>
+  const [securitySelected, setSecuritySelected] = useState(false);
 
-    <generator.Form 
-    method="post"
-    className="flex-col [&>div]:mb-3"
-    >
-        <div className="flex flex-col">
-          <label htmlFor="ssid">SSID</label>
-          <input
-            required
-            type="text"
-            name="ssid"
-            id="ssid"
-            className="py-2 px-3 rounded"
-          />
-        </div>
-        <div className="flex flex-col">
-          <label htmlFor="password">Password</label>
-          <input
-            required
-            type="text"
-            name="password"
-            id="password"
-            className="py-2 px-3 rounded"
-            // disabled={securitySelected}
-          />
-        </div>
-        <div>
-          <input 
-            type="checkbox"
-            name="hidden"
-            id="hidden"
-          />
-          <label htmlFor="hidden" className="pl-3">Hidden</label>
-        </div>
-        <fieldset 
-          className="flex justify-between"
-          // onChange={handleSecurityChange}
+  function handleSecurityChange({ target }: React.SyntheticEvent) {
+    if (target.value === 'none') {
+      setSecuritySelected(true);
+    } else {
+      setSecuritySelected(false);
+    }
+  }
+  return (
+    <div className="bg-white py-8 px-6 shadow rounded-lg sm:px-10 border-t-8 border-violet-700 ">
+      <generator.Form 
+        method="post"
+        className="mb-0 space-y-6"
         >
-          <legend>Security Level</legend>
           <div>
-            <input type="radio" name="security" id="none" value="none"/>
-            <label htmlFor="none" className="pl-3">None</label>
+            <label className="block text-sm font-medium text-gray-700" htmlFor="ssid">SSID</label>
+            <div className="mt-1">
+              <input
+                required
+                type="text"
+                name="ssid"
+                id="ssid"
+                className=""
+              />
+            </div>
           </div>
           <div>
-            <input defaultChecked type="radio" name="security" id="wpa" value="wpa"/>
-            <label htmlFor="wpa" className="pl-3">WPA/WPA2</label>
+            <label className="block text-sm font-medium text-gray-700" htmlFor="password">Password</label>
+            <div className="mt-1">
+              <input
+                type="password"
+                name="password"
+                id="password"
+                className=""
+                disabled={securitySelected}
+              />
+            </div>
           </div>
+          <fieldset 
+            className="flex justify-between"
+            onChange={handleSecurityChange}
+          >
+            <legend className="block text-sm font-medium text-gray-700 mb-1">Security Level</legend>
+            <div>
+              <input type="radio" name="security" id="none" value="none"/>
+              <label htmlFor="none" className="pl-2 text-sm font-medium text-gray-700">None</label>
+            </div>
+            <div>
+              <input defaultChecked type="radio" name="security" id="wpa" value="wpa"/>
+              <label htmlFor="wpa" className="pl-2 text-sm font-medium text-gray-700">WPA/WPA2</label>
+            </div>
+            <div>
+              <input type="radio" name="security" id="wep" value="wep"/>
+              <label htmlFor="wep" className="pl-2 text-sm font-medium text-gray-700">WEP</label>
+            </div>
+          </fieldset>
           <div>
-            <input type="radio" name="security" id="wep" value="wep"/>
-            <label htmlFor="wep" className="pl-3">WEP</label>
+            <input 
+              type="checkbox"
+              name="hidden"
+              id="hidden"
+            />
+            <label className="text-sm font-medium text-gray-700 pl-2" htmlFor="hidden">Hidden Network</label>
           </div>
-        </fieldset>
-        <button 
-          type="submit"
-          className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline mt-3"
-        >
+          <button 
+            type="submit"
+            className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-violet-600 hover:bg-violet-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-violet-500"
+          >
           {generator.state !== 'idle'
-          ? 'Generating.....'
-          : 'Generate!'
-        }
-        </button>
-      </generator.Form>
+            ? 'Generating.....'
+            : 'Generate!'
+          }
+          </button>
+        </generator.Form>
       {generator.data?.QRString &&
         <QRCode QRString={generator.data.QRString}/>
       }
-    </React.Fragment>
+    </div>
   );
 }

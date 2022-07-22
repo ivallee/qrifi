@@ -1,4 +1,5 @@
 import { Form, useTransition, } from "@remix-run/react";
+import React from "react";
 
 type LayoutProps = {
   children?: React.ReactNode,
@@ -6,7 +7,7 @@ type LayoutProps = {
 
 export default function Layout({ children } : LayoutProps) {
   return (
-    <div className="container mx-auto p-6">
+    <React.Fragment>
       <header className="flex justify-between items-center">
         <h1 className="text-2xl font-light">
           <strong className="font-bold">
@@ -14,9 +15,9 @@ export default function Layout({ children } : LayoutProps) {
           </strong>
         </h1>
       </header>
-      <main className="w-full md:w-3/4 lg:w-2/4 mx-auto py-6 my-6">
+      <main className="w-full max-w-lg mx-auto py-6 my-6">
         {children}
       </main>
-    </div>
+    </React.Fragment>
   );
 }
