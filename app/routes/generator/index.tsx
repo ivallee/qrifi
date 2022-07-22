@@ -36,75 +36,81 @@ export default function GeneratorRoute() {
       setSecuritySelected(false);
     }
   }
+
   return (
-    <div className="bg-white py-8 px-6 shadow rounded-lg sm:px-10 border-t-8 border-violet-700 ">
-      <generator.Form 
-        method="post"
-        className="mb-0 space-y-6"
-        >
-          <div>
-            <label className="block text-sm font-medium text-gray-700" htmlFor="ssid">SSID</label>
-            <div className="mt-1">
-              <input
-                required
-                type="text"
-                name="ssid"
-                id="ssid"
-                className=""
-              />
-            </div>
-          </div>
-          <div>
-            <label className="block text-sm font-medium text-gray-700" htmlFor="password">Password</label>
-            <div className="mt-1">
-              <input
-                type="password"
-                name="password"
-                id="password"
-                className=""
-                disabled={securitySelected}
-              />
-            </div>
-          </div>
-          <fieldset 
-            className="flex justify-between"
-            onChange={handleSecurityChange}
+    <div className="w-full flex flex-col">
+      <div className="bg-white py-8 px-6 shadow rounded-lg border-t-8 border-violet-700 grid place-items-center mb-6">
+        {generator.data?.QRString ?
+          <QRCode QRString={generator.data.QRString}/> :
+          <QRCode QRString={'Hello world'} />
+        }
+      </div>
+      <div className="bg-white py-8 px-6 shadow rounded-lg">
+        <generator.Form 
+          method="post"
+          className="mb-0 space-y-6"
           >
-            <legend className="block text-sm font-medium text-gray-700 mb-1">Security Level</legend>
             <div>
-              <input type="radio" name="security" id="none" value="none"/>
-              <label htmlFor="none" className="pl-2 text-sm font-medium text-gray-700">None</label>
+              <label className="block text-sm font-medium text-gray-700" htmlFor="ssid">SSID</label>
+              <div className="mt-1">
+                <input
+                  required
+                  type="text"
+                  name="ssid"
+                  id="ssid"
+                  className=""
+                />
+              </div>
             </div>
             <div>
-              <input defaultChecked type="radio" name="security" id="wpa" value="wpa"/>
-              <label htmlFor="wpa" className="pl-2 text-sm font-medium text-gray-700">WPA/WPA2</label>
+              <label className="block text-sm font-medium text-gray-700" htmlFor="password">Password</label>
+              <div className="mt-1">
+                <input
+                  type="password"
+                  name="password"
+                  id="password"
+                  className=""
+                  disabled={securitySelected}
+                />
+              </div>
             </div>
+            <fieldset 
+              className="flex justify-between"
+              onChange={handleSecurityChange}
+            >
+              <legend className="block text-sm font-medium text-gray-700 mb-1">Security Level</legend>
+              <div>
+                <input type="radio" name="security" id="none" value="none"/>
+                <label htmlFor="none" className="pl-2 text-sm font-medium text-gray-700">None</label>
+              </div>
+              <div>
+                <input defaultChecked type="radio" name="security" id="wpa" value="wpa"/>
+                <label htmlFor="wpa" className="pl-2 text-sm font-medium text-gray-700">WPA/WPA2</label>
+              </div>
+              <div>
+                <input type="radio" name="security" id="wep" value="wep"/>
+                <label htmlFor="wep" className="pl-2 text-sm font-medium text-gray-700">WEP</label>
+              </div>
+            </fieldset>
             <div>
-              <input type="radio" name="security" id="wep" value="wep"/>
-              <label htmlFor="wep" className="pl-2 text-sm font-medium text-gray-700">WEP</label>
+              <input 
+                type="checkbox"
+                name="hidden"
+                id="hidden"
+              />
+              <label className="text-sm font-medium text-gray-700 pl-2" htmlFor="hidden">Hidden Network</label>
             </div>
-          </fieldset>
-          <div>
-            <input 
-              type="checkbox"
-              name="hidden"
-              id="hidden"
-            />
-            <label className="text-sm font-medium text-gray-700 pl-2" htmlFor="hidden">Hidden Network</label>
-          </div>
-          <button 
-            type="submit"
-            className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-violet-600 hover:bg-violet-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-violet-500"
-          >
-          {generator.state !== 'idle'
-            ? 'Generating.....'
-            : 'Generate!'
-          }
-          </button>
-        </generator.Form>
-      {generator.data?.QRString &&
-        <QRCode QRString={generator.data.QRString}/>
-      }
+            <button 
+              type="submit"
+              className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-violet-600 hover:bg-violet-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-violet-500"
+            >
+            {generator.state !== 'idle'
+              ? 'Generating.....'
+              : 'Generate!'
+            }
+            </button>
+          </generator.Form>
+      </div>
     </div>
   );
 }
